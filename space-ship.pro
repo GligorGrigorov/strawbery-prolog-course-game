@@ -1,16 +1,17 @@
 ?-
 	G_X := 200,
 	G_Y := 700,
+	G_HEIGHT := 800,
+	G_WIDTH := 400,
 	G_SIZE := 20,
 	G_RAND := 0,
-	G_RECORD := 0,
 	G_CURRENT := 0,
 	G_GAME_OVER := 0,
 	array(speeds, 10, 0),
 	array(directions,10,0),
 	array(ypos, 10, 0),
 	array(xpos, 10, 0),
-	window(title("Space"), size(400, 800), paint_indirectly), initialize.
+	window(title("Space"), size(G_WIDTH, G_HEIGHT), paint_indirectly), initialize.
 initialize :-
 	for(I,0,9),
 		ypos(I):= I * 70,
@@ -32,7 +33,7 @@ win_func(paint):-
 			(abs(G_Y - ypos(I) - G_SIZE) =< G_SIZE ->
 			G_GAME_OVER := 1)
 		),
-		rect(xpos(I),ypos(I) mod 700,xpos(I) + 20, (ypos(I) mod 700) + 20),
+		rect(xpos(I),ypos(I) mod G_Y,xpos(I) + 20, (ypos(I) mod G_Y) + 20),
 	fail.
 
 win_func(init) :-
@@ -41,9 +42,9 @@ win_func(init) :-
 win_func(key_down(38, Repetition)) :- % up
 	G_CURRENT := G_CURRENT + 1,
   	for(I,0,9),
-		((ypos(I) + 5) mod 700 < ypos(I) + 5 ->
+		((ypos(I) + 5) mod G_Y < ypos(I) + 5 ->
 			speeds(I) := speeds(I) + 1,
-			ypos(I) := ypos(I) mod 700
+			ypos(I) := ypos(I) mod G_Y
 		),
 		ypos(I) := (ypos(I) + 5),
 	fail.
@@ -56,7 +57,7 @@ win_func(key_down(40, Repetition)) :- % down
 
 update_objects(X) :-
 	for(I, 0, 9),
-		xpos(I) := (xpos(I) + directions(I) * speeds(I)) mod 400,
+		xpos(I) := (xpos(I) + directions(I) * speeds(I)) mod G_WIDTH,
 	fail.
 update_objects(_).
 
